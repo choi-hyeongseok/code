@@ -1,0 +1,17 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<video controls="controls" th:src="${videoUrl}" width="400"
+		autoplay="autoplay"></video>
+</body>
+</html>
+

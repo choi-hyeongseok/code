@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+
+	<insert id="register"> INSERT INTO tb_user(
+		user_no,
+		user_id ,
+		user_pw ,
+		user_name ,
+		user_email ,
+		user_gender
+			) VALUES (
+		(select max(o.user_no)+1 from tb_user o),
+		#{userId} ,
+		#{userPw} ,
+		#{userName} ,
+		#{userEmail} ,
+		#{userGender}
+		)
+	</insert>
+
+	<select id="login" resultMap="userVOResultMap">
+		SELECT
+		user_no,
+		user_level,
+		user_id ,
+		user_pw ,
+		user_name ,
+		user_gender,
+		user_email,
+		user_birth,
+		user_reg_dt,
+		user_udt_dt,
+		user_del_dt,
+		user_login_dt
+		FROM tb_user
+		WHERE user_Id
+		= #{userId}
+	</select>
+
+
+	<update id="update">
+		UPDATE tb_user
+		SET
+		user_pw = #{userPw},
+		user_name =
+		#{userName},
+		user_udt_dt = NOW()
+		FROM tb_user
+		WHERE user_Id = #{userId}
+		AND user_Pw = #{userPw}
+	</update>
+
+
+	<update id="delete">
+		UPDATE tb_user
+		SET
+		user_delete_flag = 'N'
+		FROM tb_user
+		WHERE user_Id = #{userId} AND user_Pw = #{userPw}
+	</update>
+
+	<select id="selectList" resultMap="userListResultMap">
+		SELECT
+		user_no,
+		user_level,
+		user_id ,
+		user_pw ,
+		user_name ,
+		user_gender,
+		user_email,
+		user_birth,
+		user_reg_dt,
+		user_udt_dt,
+		user_del_dt,
+		user_login_dt
+		FROM tb_user
+		ORDER BY
+		user_no DESC
+	</select>
+	
+	<select id="checkOverId" parameterType="String" resultType="int">
+		SELECT
+		count(*)
+		FROM tb_user
+		WHERE user_Id = #{userId}
+	</select>
+	
+	<!-- 로그인 일차 최신화 -->
+	<update id="updateLoginDate">
+		UPDATE tb_user
+		SET user_login_dt = NOW()
+		WHERE
+		user_no = #{userNo}		
+	</update>
+
+
+	<resultMap id="userVOResultMap" type="UserVo">
+		<id property="userNo" column="user_no" />
+		<result property="userLevel" column="user_level" />
+		<result property="userId" column="user_id" />
+		<result property="userPw" column="user_pw" />
+		<result property="userName" column="user_name" />
+		<result property="userGender" column="user_gender" />
+		<result property="userEmail" column="user_email" />
+		<result property="userBirth" column="user_birth" /> 
+		<result property="userRegDate" column="user_reg_dt" />
+		<result property="userUdtDate" column="user_udt_dt" />
+		<result property="userDelDate" column="user_del_dt" />
+		<result property="userLoginDate" column="user_login_dt" />
+	</resultMap>
+
+
+	<resultMap id="userListResultMap" type="UserVo">
+		<id property="userNo" column="user_no" />
+		<result property="userLevel" column="user_level" />
+		<result property="userId" column="user_id" />
+		<result property="userPw" column="user_pw" />
+		<result property="userName" column="user_name" />
+		<result property="userGender" column="user_gender" />
+		<result property="userEmail" column="user_email" />
+		<result property="userBirth" column="user_birth" /> 
+		<result property="userRegDate" column="user_reg_dt" />
+		<result property="userUdtDate" column="user_udt_dt" />
+		<result property="userDelDate" column="user_del_dt" />
+		<result property="userLoginDate" column="user_login_dt" />
+	</resultMap>
+
+
+
+</mapper>
